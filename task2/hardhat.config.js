@@ -1,0 +1,34 @@
+require("@nomicfoundation/hardhat-toolbox");
+require("hardhat-deploy")
+require("hardhat-deploy-ethers")
+require("@openzeppelin/hardhat-upgrades")
+require("dotenv").config();
+
+/** @type import('hardhat/config').HardhatUserConfig */
+const SEPOLIA_URL = process.env.SEPOLIA_URL
+const PRIVATE_KEY = process.env.PRIVATE_KEY
+module.exports = {
+
+  solidity: {
+    version: "0.8.28",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
+    }
+  },
+  // solidity: "0.8.28",
+
+  namedAccounts: {
+    firstAccount: 0,
+    secondAccount: 1,
+    thirdAccount: 2,
+  },
+  // networks: {
+  //   sepolia: {
+  //     url: SEPOLIA_URL,
+  //     accounts: [PRIVATE_KEY]
+  //   },
+  // },
+};
