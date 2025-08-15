@@ -7,11 +7,13 @@ const { Signature } = require("ethers");
 let metaNodeStakeContract;
 let metaNodeContract;
 let myStakeTokenAddress;
+let myStakeTokenContract;
 before("before all", async function () {
     await deployments.fixture("all");
     console.log("deploy successfully")
     const myStakeTokenDep = await deployments.get("MyStakeToken");
     myStakeTokenAddress = await myStakeTokenDep.address;
+    myStakeTokenContract = await ethers.getContractAt("MyStakeToken", myStakeTokenAddress);
     console.log("myStakeTokenAddress: ", myStakeTokenAddress);
     const metaNodeStake = await deployments.get("MetaNodeStake");
     console.log("metaNodeStake address: ", metaNodeStake.address)
@@ -115,5 +117,15 @@ describe("StakePool", async function () {
         const metaNodeBalanceA = await metaNodeContract.balanceOf(firstAccount);
         console.log(`metaNodeBalanceA: ${metaNodeBalanceA}`);
 
+     });
+
+     it("deposite my My stke token", async function () { 
+        console.log("stake contract: ", metaNodeStakeContract)
+        const {secondAccount} = await getNamedAccounts();
+        console.log(`my stake token balance: ${await myStakeTokenContract.balanceOf(secondAccount)}`)
+        await myStakeTokenContract.connect(await ethers.getSigner(secondAccount)).approve(metaNodeStakeContract.target, ethers.parseEther("10"));
+        await metaNodeStakeContract.connect(await ethers.getSigner(secondAccount)).deposit(1, ethers.parseEther("10"));
+        const myStakeTokenBalance = await metaNodeStakeContract.stakingBalance(1, secondAccount);
+        expect(myStakeTokenBalance).to.equal(ethers.parseEther("10"));
      });
 });

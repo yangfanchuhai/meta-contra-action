@@ -2,11 +2,11 @@
  * Deploy MyStakeToken
  */
 module.exports = async ({getNamedAccounts, deployments}) => { 
-    const {firstAccount} = await getNamedAccounts();
+    const {secondAccount} = await getNamedAccounts();
     const {deploy, log} = deployments;
     log("Deploying MyStakeToken...");
     await deploy("MyStakeToken", {
-        from: firstAccount,
+        from: secondAccount,
         args: [],
         log: true,
     });
